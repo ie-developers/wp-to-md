@@ -36,6 +36,31 @@ sub wanted {
         mkpath($md_dirname) unless (-d $md_dirname);
 
 	system  "perl /ie-ryukyu/podman/web-servers/web-to-md/html-to-md.pl $html_file > $md_file\n";
+	# we have to remove empty index.html file
+	    if ($md_file =~ /pros/) {
+		    print "pros\n";
+	    }
+	open(my $md_fh, '<', $md_file) or die "Unable to open $md_file: $!";
+	my $rm = 1;
+	my $skip = 6;
+	while (<$md_fh>) {
+	    if ($skip) {
+		    $skip--;
+		    next;
+	    }
+	    next if (/^\[\]/);
+	    next if (/^受験生の方へ/);
+	    next if (/^\s*$/);
+	    $rm = 0;
+	    last;
+	}
+	close($md_fh);
+	if ($rm) {
+	    print "rm $md_file\n";
+	    unlink $md_file or die "Unable to remove $md_file: $!";
+	} else {
+	    print "generated $md_file\n";
+	}
     }
 }
 
