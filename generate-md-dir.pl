@@ -25,7 +25,7 @@ sub wanted {
 
         # Generate output markdown filename
         my $md_file = $html_file;
-	# $md_file =~ s/index.html/_index.html/;
+	$md_file =~ s/index.html/_index.html/;
         $md_file =~ s/^$html_dir/$md_dir/;
         $md_file =~ s/\.html$/.md/;
 	$md_file =~ s/%([0-9A-Fa-f]{2})/pack('C', hex($1))/ge;

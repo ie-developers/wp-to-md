@@ -11,6 +11,12 @@ $url =~ s/%([0-9A-Fa-f]{2})/pack('C', hex($1))/ge;
 while (<>) {
    if (/\<title\>(.*)\<\/title\>/) {
        $title = $1;
+	 $title =~ s/\&\#8211\;/-/g;
+	 $title =~ s/\&\#8212\;/—/g;
+	 $title =~ s/\&lt\;/</g;
+	 $title =~ s/\&gt\;/>/g;
+	 $title =~ s/\&smp\;/&/g;
+	 $title =~ s/\&nbsp\;//g;
 print <<"EOFEOF";
 ---
 title: "$1"
@@ -29,6 +35,12 @@ while (<>) {
 	  print "\n# $1\n\n";
       } else {
 	 s/\<li\>/- /g;
+	 s/\&\#8211\;/-/g;
+	 s/\&\#8212\;/—/g;
+	 s/\&lt\;/</g;
+	 s/\&gt\;/>/g;
+	 s/\&smp\;/&/g;
+	 s/\&nbsp\;//g;
 	 if (s/\<a href=\"([^"]*?)\"[^>]*?\>(.*?)\<\/a\>/[$2]($1)/) {
               s/%([0-9A-Fa-f]{2})/pack('C', hex($1))/ge;
 	 }
