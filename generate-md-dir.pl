@@ -37,9 +37,9 @@ sub wanted {
 
 	system  "perl /ie-ryukyu/podman/web-servers/web-to-md/html-to-md.pl $html_file > $md_file\n";
 	# we have to remove empty index.html file
-	    if ($md_file =~ /pros/) {
-		    print "pros\n";
-	    }
+	#    if ($md_file =~ /pros/) {
+	#	    print "pros\n";
+	#    }
 	open(my $md_fh, '<', $md_file) or die "Unable to open $md_file: $!";
 	my $rm = 1;
 	my $skip = 6;
@@ -59,6 +59,10 @@ sub wanted {
 	    print "rm $md_file\n";
 	    unlink $md_file or die "Unable to remove $md_file: $!";
 	} else {
+            #	Get the modification time of the original file
+            my $orig_time = (stat $html_file)[9];
+	    # Set the modification time of the markdown file to match the original
+            utime $orig_time, $orig_time, $md_file or die "Couldn't touch $md_file: $!";
 	    print "generated $md_file\n";
 	}
     }
